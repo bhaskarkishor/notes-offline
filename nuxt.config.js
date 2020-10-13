@@ -10,7 +10,7 @@ export default {
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
     titleTemplate: '%s - notes',
-    title: 'notes',
+    title: 'Notes',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -44,8 +44,31 @@ export default {
     '@nuxtjs/pwa',
     // https://go.nuxtjs.dev/content
     '@nuxt/content',
+    '@nuxtjs/firebase'
   ],
-
+  //firebase
+  firebase: {
+    config: {
+      apiKey: "AIzaSyBPLfeYdbA4jIsJ6vgba6DQ7TflScbybTU",
+      authDomain: "notes-redefined.firebaseapp.com",
+      databaseURL: "https://notes-redefined.firebaseio.com",
+      projectId: "notes-redefined",
+      storageBucket: "notes-redefined.appspot.com",
+      messagingSenderId: "630429435814",
+      appId: "1:630429435814:web:c71b6385b9a91c2324b167"
+    },
+    services: {
+      auth: {
+        persistence: 'local', // default
+        initialize: {
+          onAuthStateChangedMutation: 'ON_AUTH_STATE_CHANGED_MUTATION',
+          onAuthStateChangedAction: 'onAuthStateChangedAction'
+        },
+        ssr: false // default
+      }
+    }
+    
+  },
   // Content module configuration (https://go.nuxtjs.dev/content-config)
   content: {},
 

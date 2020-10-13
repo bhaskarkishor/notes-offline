@@ -12,8 +12,7 @@ This project is based on requirment of a cross platform always accessible notes 
 * Installable ie PWA
 * Sync across devices ie. need a database to store it in cloud
 * Multi user
-* Content to include
-	- text
+* - text
 	- Image store using canvas
 	- image upload
 * dark and light themes
