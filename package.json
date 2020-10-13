@@ -24,7 +24,7 @@
     "@wdio/mocha-framework": "^6.4.7",
     "@wdio/spec-reporter": "^6.4.7",
     "@wdio/sync": "^6.4.7",
-    "eslint-plugin-wdio": "^6.0.12",
+    "eslint-plugin-wdio": "^6.6.0",
     "webdriverio": "^6.4.7"
   }
 }

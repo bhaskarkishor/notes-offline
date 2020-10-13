@@ -4711,10 +4711,10 @@ escape-string-regexp@^2.0.0:
   resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-2.0.0.tgz#a30304e99daa32e23b2fd20f51babd07cffca344"
   integrity sha512-UpzcLCXolUWcNu5HtVMHYdXJjArjsF9C0aNnquZYY4uW/Vu0miy5YoWvbV345HauVvcAUnpRuhMMcqTcGOY2+w==
 
-eslint-plugin-wdio@^6.0.12:
-  version "6.0.12"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-wdio/-/eslint-plugin-wdio-6.0.12.tgz#e4c9d87c910eedd3fbf657c98a1b2ee374bc38b4"
-  integrity sha512-qZqcU1Z0bqrqhYM1MbwIvKQxcQEGIOEclOjcveavvLZAN4ezpXb1Ogw3xu+UK13iArregJOMI6uUt+JkFmER1A==
+eslint-plugin-wdio@^6.6.0:
+  version "6.6.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-wdio/-/eslint-plugin-wdio-6.6.0.tgz#200deff66af6e10959bce65261d2b1542d4cf125"
+  integrity sha512-6nhKL5pt1/btKrqJWZ4qqaRtrPspXJYJNIkuYLyXGOvla2Ey55iuegbnP29Gb7XTq5B9MXOPTg9CQhk2qqMJ6Q==
 
 eslint-scope@^4.0.3:
   version "4.0.3"
