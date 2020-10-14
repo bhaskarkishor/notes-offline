@@ -73,7 +73,34 @@ export default {
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: 'Vuetify.js'
+      title: 'Vuetify.js',
+      notes:[
+        {
+          'title':'sample',
+          'date':'12-09-2020',
+          'content':"description"
+        },
+        {
+          'title':'sample',
+          'date':'12-09-2020',
+          'content':"description safgdf dfs f sf wf w g sgrdhd hgfj  dhs gh j dg jhg jdj d "
+        },
+        {
+          'title':'sample',
+          'date':'12-09-2020',
+          'content':"description kdsbfjksdhufsdfsd jsdfg dsufid gdfasuiyfvdidf dsfuyidsf df"
+        },
+        {
+          'title':'sample',
+          'date':'12-09-2020',
+          'content':"description"
+        },
+        {
+          'title':'sample',
+          'date':'12-09-2020',
+          'content':"description"
+        }
+      ]
     }
   }
 }

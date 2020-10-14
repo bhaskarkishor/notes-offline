@@ -1,4 +1,5 @@
 import colors from 'vuetify/es5/util/colors'
+import firebase from './plugins/firebase.js'
 
 export default {
   // Disable server-side rendering (https://go.nuxtjs.dev/ssr-mode)
@@ -43,32 +44,10 @@ export default {
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
     // https://go.nuxtjs.dev/content
-    '@nuxt/content',
-    '@nuxtjs/firebase'
-  ],
-  //firebase
-  firebase: {
-    config: {
-      apiKey: "AIzaSyBPLfeYdbA4jIsJ6vgba6DQ7TflScbybTU",
-      authDomain: "notes-redefined.firebaseapp.com",
-      databaseURL: "https://notes-redefined.firebaseio.com",
-      projectId: "notes-redefined",
-      storageBucket: "notes-redefined.appspot.com",
-      messagingSenderId: "630429435814",
-      appId: "1:630429435814:web:c71b6385b9a91c2324b167"
-    },
-    services: {
-      auth: {
-        persistence: 'local', // default
-        initialize: {
-          onAuthStateChangedMutation: 'ON_AUTH_STATE_CHANGED_MUTATION',
-          onAuthStateChangedAction: 'onAuthStateChangedAction'
-        },
-        ssr: false // default
-      }
-    }
+    '@nuxt/content'
     
-  },
+  ],
+ 
   // Content module configuration (https://go.nuxtjs.dev/content-config)
   content: {},
 

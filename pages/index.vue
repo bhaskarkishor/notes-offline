@@ -1,53 +1,76 @@
 <template>
-  <div>
-    <!-- <h1 class="text-center">Notes</h1> -->
-    
+  <div class="editor">
+    <editor-content class="editor__content" :editor="editor" />
   </div>
 </template>
 
 <script>
-import edit from '~/components/edit'
+import Icon from './../components/icon'
+import { Editor, EditorContent } from 'tiptap'
+import {
+  Blockquote,
+  CodeBlock,
+  HardBreak,
+  Heading,
+  OrderedList,
+  BulletList,
+  ListItem,
+  TodoItem,
+  TodoList,
+  Bold,
+  Code,
+  Italic,
+  Link,
+  History,
+  Underline
+} from 'tiptap-extensions'
 export default {
-  middleware:'auth',
   components: {
-    edit
+    EditorContent,
+    Icon,
   },
-  data(){
+  watch: {
+    composeDataMessageContent: function(content) {
+//on a second thought i tried to watch to store change and update the editor content whenever the store value changes, but when i call "setContent" function it will trigger "onUpdate" function. so again the action dispatches.
+        //this.editor.setContent(content)
+    }
+  },
+  data() {
     return {
-      dialog: false,
-      notes:[
-        {
-          'title':'sample',
-          'date':'12-09-2020',
-          'content':"description"
-        },
-        {
-          'title':'sample',
-          'date':'12-09-2020',
-          'content':"description safgdf dfs f sf wf w g sgrdhd hgfj  dhs gh j dg jhg jdj d "
-        },
-        {
-          'title':'sample',
-          'date':'12-09-2020',
-          'content':"description kdsbfjksdhufsdfsd jsdfg dsufid gdfasuiyfvdidf dsfuyidsf df"
-        },
-        {
-          'title':'sample',
-          'date':'12-09-2020',
-          'content':"description"
-        },
-        {
-          'title':'sample',
-          'date':'12-09-2020',
-          'content':"description"
-        }
-      ]
+      editor: null,
     }
   },
-  methods:{
-    edit:function(){
-      this.dialog = true
-    }
-  }
-}
+  mounted() {
+    this.editor = new Editor({
+      extensions: [
+        new Blockquote(),
+        new BulletList(),
+        new CodeBlock(),
+        new HardBreak(),
+        new Heading({ levels: [1, 2] }),
+        new ListItem(),
+        new OrderedList(),
+        new TodoItem(),
+        new TodoList(),
+        new Bold(),
+        new Code(),
+        new Italic(),
+        new Link(),
+        new Underline(),
+        new History()
+      ],
+      onUpdate: ({ getJSON, getHTML }) => {
+
+        // this.$store.commit('update_note', {
+        //   key: 'content',
+        //   data: getJSON()
+        // })
+      },
+      content: ' asdkkl'
+    })
+  },
+  beforeDestroy() {
+    this.editor.destroy()
+  },
+} 
 </script>

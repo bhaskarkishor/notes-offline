@@ -1,21 +1,14 @@
 export const state = () => ({
-    authUser: true
+    notes:[]
   })
 export const mutations = {
-    ON_AUTH_STATE_CHANGED_MUTATION: (state, { authUser, claims }) => {
+    addNote(state, note){
+      state.notes.push(note);
+    },
+    update_note(state,note){
       
-      // const { uid, email, emailVerified } = authUser
-      // state.user = { uid, email, emailVerified }
     }
-    
   }
 export const actions = {
-  onAuthStateChangedAction: (ctx, { authUser, claims }) => {
-    if (!authUser) {
-      // claims = null
-      // Perform logout operations
-    } else {
-      // Do something with the authUser and the claims object...
-    }
-  }
+    //addNoteAction(context)
   }
