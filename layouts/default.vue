@@ -2,17 +2,23 @@
   <v-app dark>
     <v-navigation-drawer
       v-model="drawer"
-      :mini-variant="miniVariant"
       :clipped="clipped"
       fixed
       app
+      width="500"
     >
+    <v-container style="width:500px;height:60px">
+      <v-btn text fab class="float-right" v-on:click="drawer = !drawer">
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
+      <v-btn text fab class="float-right" v-on:click="sync">
+        <v-icon>mdi-sync</v-icon>
+      </v-btn>
+    </v-container>
       <v-list>
         <v-list-item
           v-for="(item, i) in items"
           :key="i"
-          :to="item.to"
-          router
           exact
         >
           <v-list-item-action>
@@ -21,7 +27,9 @@
             </v-btn>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
+            <v-btn text large v-on:click="selectNote(item.uid)">
+              <v-list-item-title v-text="item.title" />
+            </v-btn>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -62,15 +70,20 @@ export default {
       clipped: false,
       drawer: true,
       fixed: false,
-      items:this.$store.state.notes,
-      miniVariant: false,
-      right: true,
+      items:this.$store.state.notes
     }
   },
   methods:{
     deleteNote(uid){
       this.$store.commit('deleteNote',uid)
       alert('Note Deleted',uid)
+    },
+    selectNote(uid){
+      $nuxt.$emit('noteSelectedFromList',uid)
+      this.drawer = !this.drawer
+    },
+    sync(){
+      alert('Not available yet!')
     }
   }
 }

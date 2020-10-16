@@ -67,13 +67,13 @@ export default {
       HardBreak
     ],
     // starting editor's content
-    content: `<h1>Title here</h1><p>...</p>`
+    content: `Whats on Your Mind ...`
   }),
   methods:{
       saveNote(){
         this.$store.commit('addNote',{'uid':this.getUID,'title':this.getHeadline,'content':this.content})
         alert('Note added')
-        console.log(this.$store.state.notes)
+        // console.log(this.$store.state.notes)
       }
   },
   computed:{
@@ -83,6 +83,12 @@ export default {
       getUID(){
           return this.$store.state.notes.length + 1
       }
-  }
+  },
+  created() {
+    this.$nuxt.$on('noteSelectedFromList', (uid) => {
+      // console.log('uid_index',uid)
+      this.content = this.$store.getters.getNote(uid)
+    })
+}
 }
 </script>

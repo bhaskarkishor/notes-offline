@@ -18,3 +18,9 @@ export const mutations = {
 export const actions = {
     //addNoteAction(context)
   }
+export const getters = {
+  getNote:(state)=>(uid)=>{
+    // console.log('uid',uid)
+    return state.notes.find(x => x.uid === uid).content
+  }
+}
