@@ -18,7 +18,7 @@ export default {
       { hid: 'description', name: 'description', content: '' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/icon.png' }
     ]
   },
 
@@ -28,7 +28,8 @@ export default {
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
-    { src: '~/plugins/TiptapVuetify', mode: 'client' }
+    { src: '~/plugins/TiptapVuetify', ssr:false },
+    { src: '~/plugins/vuex-persist', ssr: false }
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
