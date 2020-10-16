@@ -1,5 +1,4 @@
 <template>
-<v-container>
   <ClientOnly>
     <!-- Use the component in the right place of the template -->
     <tiptap-vuetify v-model="content" :extensions="extensions"/>
@@ -9,10 +8,6 @@
     </template>
     
   </ClientOnly>
-  <v-btn class="float-right my-2 mx-2" fab dark bottom right v-on:click="saveNote">
-      <v-icon class="mdi mdi-content-save"></v-icon>
-    </v-btn>
-</v-container>
 </template>
 
 <script>
@@ -67,22 +62,10 @@ export default {
       HardBreak
     ],
     // starting editor's content
-    content: `<h1>Title here</h1><p>...</p>`
-  }),
-  methods:{
-      saveNote(){
-        this.$store.commit('addNote',{'uid':this.getUID,'title':this.getHeadline,'content':this.content})
-        alert('Note added')
-        console.log(this.$store.state.notes)
-      }
-  },
-  computed:{
-      getHeadline(){
-          return this.content.slice(4,20)
-      },
-      getUID(){
-          return this.$store.state.notes.length + 1
-      }
-  }
+    content: `
+      <h1>Yay Headlines!</h1>
+      <p>All these <strong>cool tags</strong> are working now.</p>
+    `
+  })
 }
 </script>

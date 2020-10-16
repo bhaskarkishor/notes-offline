@@ -16,7 +16,9 @@
           exact
         >
           <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
+            <v-btn fab small red dark v-on:click="deleteNote(item.uid)">
+              <v-icon>mdi-delete</v-icon>
+            </v-btn>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title v-text="item.title" />
@@ -30,7 +32,7 @@
       <v-btn icon @click.stop="miniVariant = !miniVariant" >
         <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
       </v-btn>
-      <v-toolbar-title>Notes</v-toolbar-title>
+      <v-toolbar-title>Notes-Redefined</v-toolbar-title>
     
       <v-spacer />
       
@@ -47,60 +49,30 @@
       </v-container>
     </v-main>
     
-    <footer app>
-    <div class="text-center">
-      Made By Bhaskar Kishor | <span>&copy; {{ new Date().getFullYear() }}</span>
-    </div>
-    </footer>
+    <Footer/>
   </v-app>
 </template>
 
 <script>
+import Footer from '../components/footer'
 export default {
+  components:{
+    Footer
+  },
   data () {
     return {
       clipped: false,
       drawer: true,
       fixed: false,
-      items: [
-        {
-          icon: 'mdi-apps',
-          title: 'General',
-          to: '/'
-        },
-        
-      ],
+      items:this.$store.state.notes,
       miniVariant: false,
       right: true,
-      rightDrawer: false,
-      title: 'Vuetify.js',
-      notes:[
-        {
-          'title':'sample',
-          'date':'12-09-2020',
-          'content':"description"
-        },
-        {
-          'title':'sample',
-          'date':'12-09-2020',
-          'content':"description safgdf dfs f sf wf w g sgrdhd hgfj  dhs gh j dg jhg jdj d "
-        },
-        {
-          'title':'sample',
-          'date':'12-09-2020',
-          'content':"description kdsbfjksdhufsdfsd jsdfg dsufid gdfasuiyfvdidf dsfuyidsf df"
-        },
-        {
-          'title':'sample',
-          'date':'12-09-2020',
-          'content':"description"
-        },
-        {
-          'title':'sample',
-          'date':'12-09-2020',
-          'content':"description"
-        }
-      ]
+    }
+  },
+  methods:{
+    deleteNote(uid){
+      this.$store.commit('deleteNote',uid)
+      alert('Note Deleted',uid)
     }
   }
 }
