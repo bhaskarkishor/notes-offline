@@ -1,5 +1,5 @@
 <template>
-<v-container>
+<div>
   <ClientOnly>
     <!-- Use the component in the right place of the template -->
     <tiptap-vuetify v-model="content" :extensions="extensions"/>
@@ -10,9 +10,9 @@
     
   </ClientOnly>
   <v-btn class="float-right my-2 mx-2" fab dark bottom right v-on:click="saveNote">
-      <v-icon class="mdi mdi-content-save"></v-icon>
+      <v-icon class="mdi mdi-check"></v-icon>
     </v-btn>
-</v-container>
+</div>
 </template>
 
 <script>

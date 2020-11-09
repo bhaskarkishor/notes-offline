@@ -10,7 +10,6 @@
     "test:e2e": "wdio wdio.conf.js"
   },
   "dependencies": {
-    "@nuxt/content": "^1.8.1",
     "@nuxtjs/pwa": "^3.0.2",
     "core-js": "^3.6.5",
     "firebase": "^7.21.0",
@@ -28,5 +27,8 @@
     "@wdio/sync": "^6.4.7",
     "eslint-plugin-wdio": "^6.0.12",
     "webdriverio": "^6.4.7"
+  },
+  "resolutions": {
+    "prosemirror-model": "1.9.1"
   }
 }

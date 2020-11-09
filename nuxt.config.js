@@ -1,5 +1,4 @@
 import colors from 'vuetify/es5/util/colors'
-import firebase from './plugins/firebase.js'
 
 export default {
   // Disable server-side rendering (https://go.nuxtjs.dev/ssr-mode)
@@ -29,7 +28,8 @@ export default {
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
     { src: '~/plugins/TiptapVuetify', ssr:false },
-    { src: '~/plugins/vuex-persist', ssr: false }
+    { src: '~/plugins/vuex-persist', ssr: false },
+    { src: '~/plugins/firebase.js', ssr: false }
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
@@ -44,15 +44,17 @@ export default {
   // Modules (https://go.nuxtjs.dev/config-modules)
   modules: [
     // https://go.nuxtjs.dev/pwa
-    '@nuxtjs/pwa',
-    // https://go.nuxtjs.dev/content
-    '@nuxt/content'
+    '@nuxtjs/pwa'
     
   ],
  
   // Content module configuration (https://go.nuxtjs.dev/content-config)
   content: {},
-
+  pwa: {
+    icon: {
+      /* icon options */
+    }
+  },
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
@@ -74,6 +76,7 @@ export default {
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {
-    transpile: ['vuetify/lib', "tiptap-vuetify"]
+    transpile: ['vuetify/lib', "tiptap-vuetify"],
+    extend (config, ctx) {}
   }
 }

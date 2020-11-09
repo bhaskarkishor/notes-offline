@@ -7,37 +7,48 @@
       app
       width="500"
     >
-    <v-container style="width:500px;height:60px">
+
+    <v-container style="width:90%;height:60px">
+      <v-img height="50" class="float-left" :src="$icon(64)"></v-img>
       <v-btn text fab class="float-right" v-on:click="drawer = !drawer">
         <v-icon>mdi-close</v-icon>
       </v-btn>
       <v-btn text fab class="float-right" v-on:click="sync">
         <v-icon>mdi-sync</v-icon>
       </v-btn>
+      <v-btn text fab class="float-right" v-on:click="drawer = !drawer">
+        <v-icon>mdi-pencil</v-icon>
+      </v-btn>
     </v-container>
+
+
       <v-list>
         <v-list-item
           v-for="(item, i) in items"
           :key="i"
           exact
         >
-          <v-list-item-action>
-            <v-btn fab small red dark v-on:click="deleteNote(item.uid)">
-              <v-icon>mdi-delete</v-icon>
-            </v-btn>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-btn text large v-on:click="selectNote(item.uid)">
-              <v-list-item-title v-text="item.title" />
-            </v-btn>
-          </v-list-item-content>
+          <v-card outlined class="my-1" v-on:click="selectNote(item.uid)" width="400" max-height="300">
+             <div class="d-flex flex-no-wrap justify-space-between">
+              <div>
+                <v-card-actions  class="float-left">
+                <v-btn fab small red dark  v-on:click="deleteNote(item.uid)">
+                  <v-icon>mdi-delete</v-icon>
+                </v-btn>
+                </v-card-actions>
+                <v-card-text v-html="item.content">
+                </v-card-text>   
+              </div>
+             </div>         
+          </v-card>
         </v-list-item>
       </v-list>
+
     </v-navigation-drawer>
 
     <v-app-bar :clipped-left="clipped" fixed app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      
+      <v-img height="50" width="50" class="float-left" :src="$icon(512)"></v-img>
       <v-toolbar-title>Notes-Redefined</v-toolbar-title>
     
       <v-spacer />
@@ -50,9 +61,9 @@
     </v-app-bar>
 
     <v-main>
-      <v-container>
+      
         <nuxt />
-      </v-container>
+      
     </v-main>
     
     <Footer/>
@@ -68,7 +79,7 @@ export default {
   data () {
     return {
       clipped: false,
-      drawer: true,
+      drawer: false,
       fixed: false,
       items:this.$store.state.notes
     }
