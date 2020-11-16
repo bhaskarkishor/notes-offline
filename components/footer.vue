@@ -1,8 +1,8 @@
 <template>
-<footer app>
-    <div class="text-center small-text pb-2">
+<footer>
+    <v-container class="text-center small-text pb-2">
       Made By Bhaskar Kishor | <span>&copy; {{ new Date().getFullYear() }}</span>
-    </div>
+    </v-container>
 </footer>
 </template>
 

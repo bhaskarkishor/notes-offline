@@ -1,15 +1,15 @@
 <template>
-  <v-app dark>
+  <v-app>
     
   <v-row>
         <v-toolbar
-          color="light-blue"
-          light
+          color="accent"
+          
           :extension-height="slotExtensionHeight"
         >
           
-          <v-toolbar-title class="white--text">
-            Notes
+          <v-toolbar-title class="primary--text">
+            {{user}}'s Notes
           </v-toolbar-title>
           <v-spacer></v-spacer>
           <template v-slot:extension >
@@ -33,7 +33,7 @@
   </v-row>
 
 
-    <v-main>
+    <v-main v-show="!newNoteEntry">
       
         <nuxt />
       
@@ -52,7 +52,8 @@ export default {
   data () {
     return {
       newNoteEntry:false,
-      slotExtensionHeight:'50%',
+      slotExtensionHeight:'20%',
+      askUserNameDialog:false,
     }
   },
   methods:{
@@ -70,11 +71,25 @@ export default {
 
     },
     saveNote(){
+      try{
+        this.$refs.editor.saveNote()
+      }
+      catch(err){
+        if(err=="TypeError: Cannot read property 'slice' of null"){
+          alert("Note is Empty")
+        }
+        else{
+          alert(err)
+        }
+      }
       this.newNoteEntry = !this.newNoteEntry
       this.slotExtensionHeight = '50%'
-      this.$refs.editor.saveNote()
+    },
+    setUserName(){
+      this.$store.commit(setUsername,name)
     }
   },
+  
   computed: {
       activeFab () {
         if(this.newNoteEntry){
@@ -84,10 +99,28 @@ export default {
           return { color: 'primary', icon: 'mdi-plus', fun:'createNote' }
         }
       },
+      user(){
+        let user = this.$store.getters.getUserName
+        if(user==''){
+          this.askUserNameDialog = true
+        }
+        console.log(user,'user')
+        return this.$store.getters.getUserName
+      }
     },
-
+  
+  watch:{
+    userName(){
+      if(this.user==''){
+        this.dialogUserName = true
+        console.log('shit')
+      }
+    }
+  }
 }
 </script>
-<style scoped>
-
+<style>
+*{
+  line-height: 0.9rem;
+}
 </style>

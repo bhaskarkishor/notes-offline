@@ -3,11 +3,12 @@
     
         <!-- Use the component in the right place of the template -->
         <tiptap-vuetify
-          
+          style="height:700px;"
+          height="300"
           placeholder="Write something …" 
           v-model="content" 
           :extensions="extensions"
-          :toolbar-attributes="{ color: '#f2d38a' }"
+          :toolbar-attributes="{ color: 'secondary' }"
           :card-props="{ flat: true, color: 'accent' }"
         />
         
@@ -58,7 +59,7 @@ export default {
         Heading,
         {
           options: {
-            levels: [1]
+            levels: [1,2,3]
           }
         }
       ],

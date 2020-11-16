@@ -1,5 +1,6 @@
 export const state = () => ({
-    notes:[]
+    notes:[],
+    userName:'Bhaskar',
   })
 export const mutations = {
     addNote(state, note){
@@ -13,6 +14,9 @@ export const mutations = {
         }
       }
       console.log('done deleted');
+    },
+    setUserName(state,name){
+      state.userName = name
     }
   }
 export const actions = {
@@ -22,5 +26,8 @@ export const getters = {
   getNote:(state)=>(uid)=>{
     // console.log('uid',uid)
     return state.notes.find(x => x.uid === uid).content
+  },
+  getUserName(state){
+    return state.userName
   }
 }
