@@ -1,6 +1,6 @@
 <template>
   <v-app dark>
-    <v-navigation-drawer
+    <!-- <v-navigation-drawer
       v-model="drawer"
       :clipped="clipped"
       fixed
@@ -43,61 +43,82 @@
           </v-card>
         </v-list-item>
       </v-list>
-    </v-navigation-drawer>
+    </v-navigation-drawer> -->
 
-    <v-app-bar :clipped-left="clipped" fixed app flat>
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-img height="50" width="50" class="float-left" :src="$icon(512)"></v-img>
-      <v-toolbar-title class="text-decoration-line-through font-weight-black">Notes-Redefined</v-toolbar-title>    
-      <v-spacer />
-      <v-btn class="mx-2" fab dark small color="primary">
-        <v-icon dark>mdi-account</v-icon>
-      </v-btn>
-    </v-app-bar>
+    <v-app-bar
+          color="light-blue"
+          light
+          extended
+          
+          hide-on-scroll
+        >
+          <v-toolbar-title class="white--text">
+            Notes
+          </v-toolbar-title>
+          
+          <template v-slot:extension v-if="newNoteEntry">
+            <Editor/>
+            <v-btn
+              fab
+              color="cyan accent-2"
+              bottom
+              right
+              absolute
+              @click="saveNote"
+            >
+              <v-icon>mdi-check</v-icon>
+            </v-btn>
+          </template>
+           <template v-slot:extension v-else>
+            <v-btn
+              fab
+              color="cyan accent-2"
+              dark
+              absolute
+              right
+              bottom   
+              @click="openEditor"
+            >
+              <v-icon>mdi-plus</v-icon>
+            </v-btn>
+          </template>
+        </v-app-bar>
 
-    <v-main class="accent">
-      
+    
+        <v-main>
         <nuxt />
-      
-    </v-main>
-    <Footer/>
+        </v-main>
+    
+    
   </v-app>
 </template>
 
 <script>
 import Footer from '../components/footer'
+import Editor from '../components/markdownEditor'
 export default {
   components:{
-    Footer
+    Footer,Editor
   },
   data () {
     return {
-      clipped: false,
-      drawer: false,
-      fixed: false,
-      items: this.$store.state.notes
+      newNoteEntry: false,
+      items: this.$store.state.notes,
+      extensionHeight:100
     }
   },
   methods:{
-    deleteNote(uid){
-      this.$store.commit('deleteNote',uid)
-      alert('Note Deleted',uid)
+    openEditor(){
+      this.newNoteEntry = !this.newNoteEntry
+      this.extensionHeight = 100
     },
-    selectNote(uid){
-      $nuxt.$emit('noteSelectedFromList',uid)
-      this.drawer = !this.drawer
-    },
-    sync(){
-      alert('Not available yet!')
+    saveNote(){
+      this.newNoteEntry = !this.newNoteEntry
+      this.extensionHeight = 50
     }
   }
 }
 </script>
 <style scoped>
-.account{
-  overflow:hidden;
-}
-*{
-  line-height: 0.9rem;
-}
+
 </style>
