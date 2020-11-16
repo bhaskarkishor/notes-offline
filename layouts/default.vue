@@ -1,95 +1,44 @@
 <template>
   <v-app dark>
-    <!-- <v-navigation-drawer
-      v-model="drawer"
-      :clipped="clipped"
-      fixed
-      app
-      width="500"
-    >
-
-    <v-container style="width:90%;height:60px">
-      <v-img height="50" class="float-left" :src="$icon(64)"></v-img>
-      <v-btn text fab class="float-right" v-on:click="drawer = !drawer">
-        <v-icon>mdi-close</v-icon>
-      </v-btn>
-      <v-btn text fab class="float-right" v-on:click="sync">
-        <v-icon>mdi-sync</v-icon>
-      </v-btn>
-      <v-btn text fab class="float-right" v-on:click="drawer = !drawer">
-        <v-icon>mdi-pencil</v-icon>
-      </v-btn>
-    </v-container>
-
-
-      <v-list>
-        <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-          exact
-        >
-          <v-card outlined class="my-1" v-on:click="selectNote(item.uid)" width="400" max-height="300">
-             <div class="d-flex flex-no-wrap justify-space-between">
-              <div>
-                <v-card-actions  class="float-left">
-                <v-btn fab small red dark  v-on:click="deleteNote(item.uid)">
-                  <v-icon>mdi-delete</v-icon>
-                </v-btn>
-                </v-card-actions>
-                <v-card-text v-html="item.content">
-                </v-card-text>   
-              </div>
-             </div>         
-          </v-card>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer> -->
-
-    <v-app-bar
+    
+  <v-row>
+        <v-toolbar
           color="light-blue"
           light
-          extended
-          
-          hide-on-scroll
+          :extension-height="slotExtensionHeight"
         >
+          
           <v-toolbar-title class="white--text">
             Notes
           </v-toolbar-title>
+          <v-spacer></v-spacer>
+          <template v-slot:extension >
+            <Editor ref="editor" v-if="newNoteEntry"/>
+            <v-fab-transition>
+              <v-btn
+                :key="activeFab.icon"
+                fab
+                :color="activeFab.color"
+                bottom
+                right
+                absolute
+                @click="activeFabClick"
+              >
+                <v-icon>{{activeFab.icon}}</v-icon>
+              </v-btn>
+            </v-fab-transition>
+          </template>
           
-          <template v-slot:extension v-if="newNoteEntry">
-            <Editor/>
-            <v-btn
-              fab
-              color="cyan accent-2"
-              bottom
-              right
-              absolute
-              @click="saveNote"
-            >
-              <v-icon>mdi-check</v-icon>
-            </v-btn>
-          </template>
-           <template v-slot:extension v-else>
-            <v-btn
-              fab
-              color="cyan accent-2"
-              dark
-              absolute
-              right
-              bottom   
-              @click="openEditor"
-            >
-              <v-icon>mdi-plus</v-icon>
-            </v-btn>
-          </template>
-        </v-app-bar>
+        </v-toolbar>
+  </v-row>
 
-    
-        <v-main>
+
+    <v-main>
+      
         <nuxt />
-        </v-main>
-    
-    
+      
+    </v-main>
+    <Footer/>
   </v-app>
 </template>
 
@@ -102,21 +51,41 @@ export default {
   },
   data () {
     return {
-      newNoteEntry: false,
-      items: this.$store.state.notes,
-      extensionHeight:100
+      newNoteEntry:false,
+      slotExtensionHeight:'50%',
     }
   },
   methods:{
-    openEditor(){
+    activeFabClick(){
+      if(this.newNoteEntry){
+        this.saveNote()
+      }
+      else{
+        this.createNote()
+      }
+    },
+    createNote(){
       this.newNoteEntry = !this.newNoteEntry
-      this.extensionHeight = 100
+      this.slotExtensionHeight = 500
+
     },
     saveNote(){
       this.newNoteEntry = !this.newNoteEntry
-      this.extensionHeight = 50
+      this.slotExtensionHeight = '50%'
+      this.$refs.editor.saveNote()
     }
-  }
+  },
+  computed: {
+      activeFab () {
+        if(this.newNoteEntry){
+          return { color: 'primary', icon: 'mdi-check', fun:'saveNote' }
+        }
+        else{
+          return { color: 'primary', icon: 'mdi-plus', fun:'createNote' }
+        }
+      },
+    },
+
 }
 </script>
 <style scoped>

@@ -1,14 +1,14 @@
 <template>
-    <div>
+    <div style="width:100%;height:100%">
     
         <!-- Use the component in the right place of the template -->
         <tiptap-vuetify
-    
-        placeholder="Write something …" 
-        v-model="content" 
-        :extensions="extensions"
-        :toolbar-attributes="{ color: '#f2d38a' }"
-        :card-props="{ flat: true, color: '#c4f2ee' }"
+          
+          placeholder="Write something …" 
+          v-model="content" 
+          :extensions="extensions"
+          :toolbar-attributes="{ color: '#f2d38a' }"
+          :card-props="{ flat: true, color: 'accent' }"
         />
         
     

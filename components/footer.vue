@@ -1,6 +1,6 @@
 <template>
 <footer app>
-    <div class="text-center accent small-text pb-2">
+    <div class="text-center small-text pb-2">
       Made By Bhaskar Kishor | <span>&copy; {{ new Date().getFullYear() }}</span>
     </div>
 </footer>
