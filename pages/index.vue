@@ -2,16 +2,19 @@
 <div>
   <ClientOnly>
     <!-- Use the component in the right place of the template -->
-    <tiptap-vuetify v-model="content" :extensions="extensions"/>
-
-    <template #placeholder>
-      Loading...
-    </template>
+    <tiptap-vuetify
+    style="height:400px"
+    placeholder="Write something …" 
+    v-model="content" 
+    :extensions="extensions"
+    :toolbar-attributes="{ color: '#f2d38a' }"
+    :card-props="{ flat: true, color: '#c4f2ee' }"
+    />
     
   </ClientOnly>
-  <v-btn class="float-right my-2 mx-2" fab dark bottom right v-on:click="saveNote">
+  <v-btn class="my-2 mx-2 primaary" fab primary v-on:click="saveNote">
       <v-icon class="mdi mdi-check"></v-icon>
-    </v-btn>
+  </v-btn>
 </div>
 </template>
 
@@ -55,19 +58,18 @@ export default {
         Heading,
         {
           options: {
-            levels: [1, 2, 3]
+            levels: [1]
           }
         }
       ],
       Bold,
-      Link,
       Code,
       HorizontalRule,
       Paragraph,
       HardBreak
     ],
     // starting editor's content
-    content: `Whats on Your Mind ...`
+    content: null
   }),
   methods:{
       saveNote(){

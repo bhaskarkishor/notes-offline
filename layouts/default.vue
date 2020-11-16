@@ -43,29 +43,23 @@
           </v-card>
         </v-list-item>
       </v-list>
-
     </v-navigation-drawer>
 
-    <v-app-bar :clipped-left="clipped" fixed app>
+    <v-app-bar :clipped-left="clipped" fixed app flat>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-img height="50" width="50" class="float-left" :src="$icon(512)"></v-img>
-      <v-toolbar-title>Notes-Redefined</v-toolbar-title>
-    
+      <v-toolbar-title class="text-decoration-line-through font-weight-black">Notes-Redefined</v-toolbar-title>    
       <v-spacer />
-      
-      
       <v-btn class="mx-2" fab dark small color="primary">
         <v-icon dark>mdi-account</v-icon>
       </v-btn>
-
     </v-app-bar>
 
-    <v-main>
+    <v-main class="accent">
       
         <nuxt />
       
     </v-main>
-    
     <Footer/>
   </v-app>
 </template>
@@ -81,7 +75,7 @@ export default {
       clipped: false,
       drawer: false,
       fixed: false,
-      items:this.$store.state.notes
+      items: this.$store.state.notes
     }
   },
   methods:{
@@ -102,5 +96,8 @@ export default {
 <style scoped>
 .account{
   overflow:hidden;
+}
+*{
+  line-height: 0.9rem;
 }
 </style>
