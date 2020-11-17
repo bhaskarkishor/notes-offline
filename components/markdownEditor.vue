@@ -2,7 +2,7 @@
     <div style="width:100%;height:100%">
     
         <!-- Use the component in the right place of the template -->
-        <tiptap-vuetify
+        <!-- <tiptap-vuetify
           style="height:700px;"
           height="300"
           placeholder="Write something …" 
@@ -10,8 +10,10 @@
           :extensions="extensions"
           :toolbar-attributes="{ color: 'secondary' }"
           :card-props="{ flat: true, color: 'accent' }"
-        />
-        
+        /> -->
+      <div class="editor">
+        <editor-content class="editor__content" :editor="editor" />
+      </div>  
     
     <!-- <v-btn class="my-2 mx-2 primaary" fab primary v-on:click="saveNote">
         <v-icon class="mdi mdi-check"></v-icon>
@@ -21,57 +23,54 @@
 
 <script>
 // import the component and the necessary extensions
+import Icon from './icon'
+import { Editor, EditorContent } from 'tiptap'
 import {
-  TiptapVuetify,
-  Heading,
-  Bold,
-  Italic,
-  Strike,
-  Underline,
-  Code,
-  Paragraph,
-  BulletList,
-  OrderedList,
-  ListItem,
-  Link,
   Blockquote,
+  CodeBlock,
   HardBreak,
-  HorizontalRule,
-  History
-} from 'tiptap-vuetify'
+  Heading,
+  OrderedList,
+  BulletList,
+  ListItem,
+  TodoItem,
+  TodoList,
+  Bold,
+  Code,
+  Italic,
+  Link,
+  History,
+} from 'tiptap-extensions'
 
 export default {
   // specify TiptapVuetify component in "components"
-  components: { TiptapVuetify },
+  components: { EditorContent,
+    Icon, },
   data: () => ({
     // declare extensions you want to use
-    extensions: [
-      History,
-      Blockquote,
-      Link,
-      Underline,
-      Strike,
-      Italic,
-      ListItem,
-      BulletList,
-      OrderedList,
-      [
-        Heading,
-        {
-          options: {
-            levels: [1,2,3]
-          }
-        }
-      ],
-      Bold,
-      Code,
-      HorizontalRule,
-      Paragraph,
-      HardBreak
-    ],
-    // starting editor's content
-    content: null
+    editor: new Editor({
+        extensions: [
+          new Blockquote(),
+          new BulletList(),
+          new CodeBlock(),
+          new HardBreak(),
+          new Heading({ levels: [1, 2, 3] }),
+          new ListItem(),
+          new OrderedList(),
+          new TodoItem(),
+          new TodoList(),
+          new Bold(),
+          new Code(),
+          new Italic(),
+          new Link(),
+          new History(),
+        ],
+        content: 'here we go  ',
+      }),
   }),
+  beforeDestroy() {
+    this.editor.destroy()
+  },
   methods:{
       saveNote(){
         this.$store.commit('addNote',{'uid':this.getUID,'title':this.getHeadline,'content':this.content})
@@ -95,3 +94,12 @@ export default {
 }
 }
 </script>
+<style scoped>
+.editor{
+  background-color: white;
+  height:90%;
+}
+.editor__content{
+  background-color: aliceblue;
+}
+</style>

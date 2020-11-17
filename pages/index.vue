@@ -1,86 +1,142 @@
 <template>
-  <v-container mt-10>
-  <div class="masonry">
-        <v-card v-for="(note, key) in notes"
-             :key="key"
-             class="card mx-3"
-             outlined
-             @click="openModel(note.uid)"
+  <div>
+    
+    <v-row>
+      <v-navigation-drawer
+      :mini-variant.sync="miniVariant"
+      :clipped="clipped"
+      v-model="drawer"
+      width="50%"
+      fixed
+      right
+      app
+    >
+      
+    </v-navigation-drawer>
+        <v-toolbar
+          color="secondary"
+          extended
+          light
+          :extension-height="slotExtensionHeight"
         >
-        <div class="card-content">
-          <v-card-title v-html="note.title">
-          </v-card-title>
-          <v-card-text v-html="note.content">
-          </v-card-text>
-        </div>
-        </v-card>
-    </div>
-  </v-container>
+          <v-spacer></v-spacer>
+          <v-toolbar-title class="white--text text-h4">
+            Notes
+          </v-toolbar-title>
+          <v-spacer></v-spacer>
+          <template v-slot:extension >
+            <v-fab-transition>
+              <v-btn
+                :key="activeFab.icon"
+                fab
+                :color="activeFab.color"
+                bottom
+                left
+                absolute
+                @click="activeFabClick"
+              >
+                <v-icon>{{activeFab.icon}}</v-icon>
+              </v-btn>
+            </v-fab-transition>
+          </template>
+        </v-toolbar>
+    </v-row>
+
+    <v-main>
+      <NotesView/>
+    </v-main>
+  </div>
 </template>
 
 <script>
+import Editor from '../components/markdownEditor'
+import NotesView from './../components/notesView'
 export default {
-  data(){
+  components:{
+    Editor,
+    NotesView
+  },
+  data () {
     return {
-      notes:this.$store.state.notes,
+      miniVariant:false,
+      clipped:true,
+      drawer:true,
+      noteEditorState:false,
+      slotExtensionHeight:'20%',
+      askUserNameDialog:false,
+      widthNotesWindow:'80%'
     }
   },
-  mounted(){
-    this.resizeAllMasonryItems()
-  },
-  created () {
-            let masonryEvents = ['load', 'resize'];
-            let vm = this
-            masonryEvents.forEach(function (event) {
-                window.addEventListener(event, vm.resizeAllMasonryItems);
-            });
-        },
   methods:{
-    openModel(uid){
-      return
+    activeFabClick(){
+      if(this.noteEditorState){
+        this.saveNote()
+      }
+      else{
+        this.createNote()
+      }
     },
-    resizeMasonryItem (item) {
-      /* Get the grid object, its row-gap, and the size of its implicit rows */
-      let grid = document.getElementsByClassName('masonry')[0],
-        rowGap = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-row-gap')),
-        rowHeight = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-auto-rows'));
-
-                /*
-                 * Spanning for any brick = S
-                 * Grid's row-gap = G
-                 * Size of grid's implicitly create row-track = R
-                 * Height of item content = H
-                 * Net height of the item = H1 = H + G
-                 * Net height of the implicit row-track = T = G + R
-                 * S = H1 / T
-                 */
-
-      let rowSpan = Math.ceil((item.querySelector('.card-content').getBoundingClientRect().height + rowGap) / (rowHeight + rowGap));
-
-                /* Set the spanning as calculated above (S) */
-      item.style.gridRowEnd = 'span ' + rowSpan;
+    createNote(){
+      this.noteEditorState = !this.noteEditorState
+      //this.$refs.
     },
-    resizeAllMasonryItems () {
-                // Get all item class objects in one list
-      let allItems = document.getElementsByClassName('card');
-
-                /*
-                 * Loop through the above list and execute the spanning function to
-                 * each list-item (i.e. each masonry item)
-                 */
-      for (let i = 0; i < allItems.length; i++) {
-        this.resizeMasonryItem(allItems[i]);
+    saveNote(){
+      try{
+        this.$refs.editor.saveNote()
+      }
+      catch(err){
+        if(err=="TypeError: Cannot read property 'slice' of null"){
+          alert("Note is Empty")
+        }
+        else{
+          alert(err)
+        }
+      }
+      this.noteEditorState = !this.noteEditorState
+    },
+    setUserName(){
+      this.$store.commit(setUsername,name)
+    }
+  },
+  
+  computed: {
+      activeFab () {
+        if(this.noteEditorState){
+          return { color: 'primary', icon: 'mdi-check', fun:'saveNote' }
+        }
+        else{
+          return { color: 'primary', icon: 'mdi-plus', fun:'createNote' }
+        }
+      },
+      user(){
+        let user = this.$store.getters.getUserName
+        if(user==''){
+          this.askUserNameDialog = true
+        }
+        console.log(user,'user')
+        return this.$store.getters.getUserName
+      }
+    },
+  
+  watch:{
+    userName(){
+      if(this.user==''){
+        this.dialogUserName = true
+        console.log('shit')
       }
     }
-  }
+  },
+  created () {
+    let masonryEvents = ['load', 'resize'];
+    let vm = this
+    masonryEvents.forEach(function (event) {
+      window.addEventListener(event, vm.resizeAllMasonryItems);
+    });
+  },
 }
 </script>
-
-<style lang="css" type="text/css">
-    .masonry {
-        display: grid;
-        grid-gap: 15px;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        grid-auto-rows: 0;
-    }
+<style>
+*{
+  line-height: 0.1rem;
+}
 </style>

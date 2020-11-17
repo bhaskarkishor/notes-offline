@@ -1,9 +1,9 @@
 <template>
-<footer>
+<v-footer class="accent">
     <v-container class="text-center small-text pb-2">
       Made By Bhaskar Kishor | <span>&copy; {{ new Date().getFullYear() }}</span>
     </v-container>
-</footer>
+</v-footer>
 </template>
 
 <script>
