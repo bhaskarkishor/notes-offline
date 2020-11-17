@@ -1,27 +1,12 @@
 <template>
-  <v-app dark>
+  <v-app>
     <v-navigation-drawer
       v-model="drawer"
       :clipped="clipped"
       fixed
       app
-      width="500"
+      :width="drawerWidth"
     >
-
-    <v-container style="width:90%;height:60px">
-      <v-img height="50" class="float-left" :src="$icon(64)"></v-img>
-      <v-btn text fab class="float-right" v-on:click="drawer = !drawer">
-        <v-icon>mdi-close</v-icon>
-      </v-btn>
-      <v-btn text fab class="float-right" v-on:click="sync">
-        <v-icon>mdi-sync</v-icon>
-      </v-btn>
-      <v-btn text fab class="float-right" v-on:click="drawer = !drawer">
-        <v-icon>mdi-pencil</v-icon>
-      </v-btn>
-    </v-container>
-
-
       <v-list>
         <v-list-item
           v-for="(item, i) in items"
@@ -46,18 +31,30 @@
 
     </v-navigation-drawer>
 
-    <v-app-bar :clipped-left="clipped" fixed app>
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-img height="50" width="50" class="float-left" :src="$icon(512)"></v-img>
-      <v-toolbar-title>Notes-Redefined</v-toolbar-title>
-    
+    <v-app-bar 
+    :clipped-left="clipped" 
+    fixed 
+    app
+    extended
+    extension-height="0"
+    color="secondary">
+      <template v-slot:extension>
+        <v-fab-transition>
+              <v-btn
+                :key="activeFab.icon"
+                fab
+                color="primary"
+                bottom
+                left
+                absolute
+                @click="activeFabClick"
+                class="v-btn--example"
+              >
+                <v-icon>{{activeFab.icon}}</v-icon>
+              </v-btn>
+        </v-fab-transition>
+      </template>
       <v-spacer />
-      
-      
-      <v-btn class="mx-2" fab dark small color="primary">
-        <v-icon dark>mdi-account</v-icon>
-      </v-btn>
-
     </v-app-bar>
 
     <v-main>
@@ -78,10 +75,10 @@ export default {
   },
   data () {
     return {
-      clipped: false,
-      drawer: false,
+      clipped: true,
       fixed: false,
-      items:this.$store.state.notes
+      items:this.$store.state.notes,
+      editorState:false
     }
   },
   methods:{
@@ -95,6 +92,35 @@ export default {
     },
     sync(){
       alert('Not available yet!')
+    },
+    activeFabClick(){
+      if(this.editorState){
+        this.editorState = ! this.editorState
+      }
+      else{
+        this.editorState = !this.editorState
+      }
+    }
+  },
+  computed: {
+      activeFab () {
+        if (this.editorState) {
+          return {  icon: 'mdi-check' }
+        }
+        else{
+          return {icon:'mdi-plus'}
+        }
+      },
+    drawer(){
+      return true
+    },
+    drawerWidth(){
+      if(this.editorState){
+        return '30%'
+      }
+      else{
+        return '100%'
+      }
     }
   }
 }
@@ -102,5 +128,13 @@ export default {
 <style scoped>
 .account{
   overflow:hidden;
+}
+.v-btn--example {
+    bottom: 0;
+    position: absolute;
+    margin: 0 0 16px 16px;
+}
+html { 
+  overflow-y: auto 
 }
 </style>

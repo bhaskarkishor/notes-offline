@@ -1,8 +1,8 @@
 <template>
-<footer app>
-    <div class="text-center">
+<footer>
+    <p class="text-center">
       Made By Bhaskar Kishor | <span>&copy; {{ new Date().getFullYear() }}</span>
-    </div>
+    </p>
 </footer>
 </template>
 
