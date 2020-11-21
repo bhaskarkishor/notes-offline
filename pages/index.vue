@@ -1,88 +1,53 @@
 <template>
-  <div>
-    
-    <v-row>
-      <v-navigation-drawer
-      :mini-variant.sync="miniVariant"
-      :clipped="clipped"
-      v-model="drawer"
-      width="50%"
-      fixed
-      right
-      app
-    >
-      
-    </v-navigation-drawer>
-        <v-toolbar
-          color="secondary"
-          extended
-          light
-          :extension-height="slotExtensionHeight"
-        >
-          <v-spacer></v-spacer>
-          <v-toolbar-title class="white--text text-h4">
-            Notes
-          </v-toolbar-title>
-          <v-spacer></v-spacer>
-          <template v-slot:extension >
-            <v-fab-transition>
-              <v-btn
-                :key="activeFab.icon"
-                fab
-                :color="activeFab.color"
-                bottom
-                left
-                absolute
-                @click="activeFabClick"
-              >
-                <v-icon>{{activeFab.icon}}</v-icon>
-              </v-btn>
-            </v-fab-transition>
-          </template>
-        </v-toolbar>
-    </v-row>
-
-    <v-main>
-      <NotesView/>
-    </v-main>
-  </div>
+<v-container mt-5>
+  
+   <tiptap-vuetify
+      v-model="content"
+      :extensions="extensions"
+      placeholder="Add your thoughts"
+      v-bind:style="width"
+      class="mx-auto"
+    />
+</v-container>
 </template>
 
 <script>
-import Editor from '../components/markdownEditor'
-import NotesView from './../components/notesView'
+import { TiptapVuetify, Heading, Bold, Italic, Strike, Underline, Code, Paragraph, BulletList, OrderedList, ListItem, Link, Blockquote, HardBreak, HorizontalRule, History } from 'tiptap-vuetify'
+
+
 export default {
-  components:{
-    Editor,
-    NotesView
-  },
-  data () {
-    return {
-      miniVariant:false,
-      clipped:true,
-      drawer:true,
-      noteEditorState:false,
-      slotExtensionHeight:'20%',
-      askUserNameDialog:false,
-      widthNotesWindow:'80%'
-    }
-  },
+  // specify TiptapVuetify component in "components"
+  components: { TiptapVuetify },
+  data: () => ({
+    // declare extensions you want to use
+    extensions: [
+      History,
+      Blockquote,
+      Link,
+      Underline,
+      Strike,
+      Italic,
+      ListItem,
+      BulletList,
+      OrderedList,
+      [Heading, {
+        options: {
+          levels: [1, 2, 3]
+        }
+      }],
+      Bold,
+      Code,
+      HorizontalRule,
+      Paragraph,
+      HardBreak
+    ],
+    // starting editor's content
+    content: null
+  }),
   methods:{
-    activeFabClick(){
-      if(this.noteEditorState){
-        this.saveNote()
-      }
-      else{
-        this.createNote()
-      }
-    },
-    createNote(){
-      this.noteEditorState = !this.noteEditorState
-      //this.$refs.
-    },
     saveNote(){
       try{
-        this.$refs.editor.saveNote()
+        this.$store.commit('addNote',{'uid':this.getUID,'title':this.getHeadline,'content':this.content})
       }
       catch(err){
         if(err=="TypeError: Cannot read property 'slice' of null"){
@@ -92,29 +57,29 @@ export default {
           alert(err)
         }
       }
-      this.noteEditorState = !this.noteEditorState
-    },
-    setUserName(){
-      this.$store.commit(setUsername,name)
+     
+      alert('Note added')
+        // console.log(this.$store.state.notes)
     }
   },
-  
-  computed: {
-      activeFab () {
-        if(this.noteEditorState){
-          return { color: 'primary', icon: 'mdi-check', fun:'saveNote' }
-        }
-        else{
-          return { color: 'primary', icon: 'mdi-plus', fun:'createNote' }
-        }
+  computed:{
+      getHeadline(){
+        return this.content.slice(4,20)
       },
-      user(){
-        let user = this.$store.getters.getUserName
-        if(user==''){
-          this.askUserNameDialog = true
+      getUID(){
+        return this.$store.state.notes.length + 1
+      },
+      width(){
+        switch (this.$vuetify.breakpoint.name) {
+          case 'xs': return {width:'400px'}
+          case 'sm': return {width:'500px'}
+          case 'md': return {width:'700px'}
+          case 'lg': return {width:'700px'}
+          case 'xl': return {width:'700px'}
         }
-        console.log(user,'user')
-        return this.$store.getters.getUserName
+        return {
+          width:'300px'
+        }
       }
     },
   
@@ -133,10 +98,26 @@ export default {
       window.addEventListener(event, vm.resizeAllMasonryItems);
     });
   },
+  created() {
+    this.$nuxt.$on('saveNote',()=>{
+      this.saveNote()
+    }),
+    this.$nuxt.$on('noteSelectedFromList', (uid) => {
+      console.log('uid_index',uid)
+      this.content = this.$store.getters.getNote(uid)
+      console.log('content update',this.content)
+    })
+  },
+  beforeDestroy() {
+    this.editor.destroy()
+  },
 }
 </script>
-<style>
-*{
-  line-height: 0.1rem;
+<style scoped>
+.editor__content{
+  height:500px;
+  min-width:600px;
+  max-width:700px;
 }
+
 </style>
