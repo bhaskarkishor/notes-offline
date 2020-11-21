@@ -3,35 +3,34 @@
     <v-navigation-drawer
       v-model="drawer"
       :clipped="clipped"
-      fixed
+      right
       app
+      absolute
+      bottom
+      stateless
       :width="drawerWidth"
+      class="accent"
+      
     >
-      <v-list>
-        <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-          exact
-        >
-          <v-card outlined class="my-1" v-on:click="selectNote(item.uid)" width="400" max-height="300">
-             <div class="d-flex flex-no-wrap justify-space-between">
-              <div>
-                <v-card-actions  class="float-left">
-                <v-btn fab small red dark  v-on:click="deleteNote(item.uid)">
-                  <v-icon>mdi-delete</v-icon>
-                </v-btn>
-                </v-card-actions>
-                <v-card-text v-html="item.content">
-                </v-card-text>   
-              </div>
-             </div>         
+      <v-container >
+        <div class="masonry">
+          <v-card v-for="(note, key) in notes"
+              :key="key"
+              class="card mx-3"
+              outlined
+              @click="selectNote(note.uid)"
+          >
+            <div class="card-content">
+              <v-card-text v-html="note.content">
+              </v-card-text>
+            </div>
           </v-card>
-        </v-list-item>
-      </v-list>
-
+        </div>
+      </v-container>
     </v-navigation-drawer>
 
     <v-app-bar 
+    :clipped-right="clipped" 
     :clipped-left="clipped" 
     fixed 
     app
@@ -77,9 +76,23 @@ export default {
     return {
       clipped: true,
       fixed: false,
-      items:this.$store.state.notes,
-      editorState:false
+      drawer: true,
+      editorState:false,
+      drawerWidth:'30%'
     }
+  },
+  mounted(){
+    this.resizeAllMasonryItems()
+    setTimeout(() => {  console.log("timeout");this.toggleDrawer(); }, 1000);
+    //
+  },
+  created () {
+    let masonryEvents = ['load', 'resize'];
+    let vm = this
+    masonryEvents.forEach(function (event) {
+      window.addEventListener(event, vm.resizeAllMasonryItems);
+    });
+    
   },
   methods:{
     deleteNote(uid){
@@ -87,45 +100,90 @@ export default {
       alert('Note Deleted',uid)
     },
     selectNote(uid){
+      console.log('emitted')
       $nuxt.$emit('noteSelectedFromList',uid)
-      this.drawer = !this.drawer
+      this.editorState = true
+      this.toggleDrawer()
     },
     sync(){
       alert('Not available yet!')
     },
     activeFabClick(){
       if(this.editorState){
+        // this.drawer=!this.drawer
+        $nuxt.$emit('saveNote')
         this.editorState = ! this.editorState
+        this.toggleDrawer()
       }
       else{
         this.editorState = !this.editorState
+        this.toggleDrawer()
+      }
+    },
+    resizeMasonryItem (item) {
+      /* Get the grid object, its row-gap, and the size of its implicit rows */
+      let grid = document.getElementsByClassName('masonry')[0],
+        rowGap = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-row-gap')),
+        rowHeight = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-auto-rows'));
+                /*
+                 * Spanning for any brick = S
+                 * Grid's row-gap = G
+                 * Size of grid's implicitly create row-track = R
+                 * Height of item content = H
+                 * Net height of the item = H1 = H + G
+                 * Net height of the implicit row-track = T = G + R
+                 * S = H1 / T
+                 */
+      let rowSpan = Math.ceil((item.querySelector('.card-content').getBoundingClientRect().height + rowGap) / (rowHeight + rowGap));
+                /* Set the spanning as calculated above (S) */
+      item.style.gridRowEnd = 'span ' + rowSpan;
+    },
+    resizeAllMasonryItems () {
+                // Get all item class objects in one list
+      let allItems = document.getElementsByClassName('card');
+                /*
+                 * Loop through the above list and execute the spanning function to
+                 * each list-item (i.e. each masonry item)
+                 */
+      for (let i = 0; i < allItems.length; i++) {
+        this.resizeMasonryItem(allItems[i]);
+      }
+    },
+    toggleDrawer(){
+      if(this.editorState){
+        switch (this.$vuetify.breakpoint.name) {
+          case 'xs': this.drawerWidth= '0%';
+          case 'sm': this.drawerWidth= '0%';
+          case 'md': this.drawerWidth='0%';
+          break;
+          case 'lg': this.drawerWidth='30%'
+          case 'xl': this.drawerWidth='30%'
+        }
+      }
+      else{
+        this.drawerWidth = '100%'
       }
     }
   },
   computed: {
-      activeFab () {
-        if (this.editorState) {
-          return {  icon: 'mdi-check' }
-        }
-        else{
-          return {icon:'mdi-plus'}
-        }
-      },
-    drawer(){
-      return true
+    notes(){
+      return this.$store.state.notes
     },
-    drawerWidth(){
-      if(this.editorState){
-        return '30%'
+    activeFab () {
+      if (this.editorState) {
+        return {  icon: 'mdi-check' }
       }
       else{
-        return '100%'
+        return {icon:'mdi-plus'}
       }
-    }
+    },
   }
 }
 </script>
-<style scoped>
+<style>
+*{
+  line-height: 0.1rem;
+}
 .account{
   overflow:hidden;
 }
@@ -135,6 +193,12 @@ export default {
     margin: 0 0 16px 16px;
 }
 html { 
-  overflow-y: auto 
+  overflow-y: hidden;
+}
+.masonry {
+        display: grid;
+        grid-gap: 15px;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        grid-auto-rows: 0;
 }
 </style>
