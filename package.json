@@ -26,7 +26,7 @@
     "@wdio/spec-reporter": "^6.4.7",
     "@wdio/sync": "^6.4.7",
     "eslint-plugin-wdio": "^6.0.12",
-    "webdriverio": "^6.4.7"
+    "webdriverio": "^6.10.0"
   },
   "resolutions": {
     "prosemirror-model": "1.9.1"
