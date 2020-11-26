@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@nuxtjs/pwa": "^3.0.2",
-    "core-js": "^3.6.5",
+    "core-js": "^3.8.0",
     "firebase": "^7.21.0",
     "nuxt": "^2.14.5",
     "tiptap": "^1.30.0",
