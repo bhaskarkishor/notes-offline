@@ -21,8 +21,36 @@
               @click="selectNote(note.uid)"
           >
             <div class="card-content">
-              <v-card-text v-html="note.content">
-              </v-card-text>
+<!-- card menu -->
+            <v-card-title style="padding:0">
+            <v-spacer></v-spacer>
+              <v-menu
+                  transition="slide-y-transition"
+                  right
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      right
+                      icon
+                      v-bind="attrs"
+                      v-on="on"
+                    >
+                      <v-icon>mdi-dots-vertical</v-icon>
+                    </v-btn>
+                  </template>
+
+                  <v-list>
+                    <v-list-item
+                      v-for="(item, i) in cardMenuItems"
+                      :key="i"
+                      link
+                    >
+                      <v-list-item-title v-on:click="deleteNote(note.uid)">{{ item.title }}</v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
+            </v-card-title>
+              <v-card-text v-html="note.content"></v-card-text>
             </div>
           </v-card>
         </div>
@@ -54,9 +82,17 @@
         </v-fab-transition>
       </template>
       <v-spacer />
+      <v-btn 
+      text
+      fab
+      dark
+      style="margin-right:-40px"
+      @click="toggleDrawer">
+      <v-icon large>mdi-menu</v-icon>
+      </v-btn>
     </v-app-bar>
 
-    <v-main>
+    <v-main class="accent">
       
         <nuxt />
       
@@ -77,12 +113,15 @@ export default {
       fixed: false,
       drawer: true,
       editorState:false,
-      drawerWidth:'30%'
+      drawerWidth:'30%',
+      cardMenuItems:[
+        {title:'Delete'}
+      ]
     }
   },
   mounted(){
     this.resizeAllMasonryItems()
-    setTimeout(() => {  console.log("timeout");this.toggleDrawer(); }, 1000);
+    setTimeout(() => {  console.log("timeout");this.setDrawerWidth(); }, 1000);
     //
   },
   created () {
@@ -102,7 +141,7 @@ export default {
       console.log('emitted')
       $nuxt.$emit('noteSelectedFromList',uid)
       this.editorState = true
-      this.toggleDrawer()
+      this.setDrawerWidth()
     },
     sync(){
       alert('Not available yet!')
@@ -112,11 +151,11 @@ export default {
         // this.drawer=!this.drawer
         $nuxt.$emit('saveNote')
         this.editorState = ! this.editorState
-        this.toggleDrawer()
+        this.setDrawerWidth()
       }
       else{
         this.editorState = !this.editorState
-        this.toggleDrawer()
+        this.setDrawerWidth()
       }
     },
     resizeMasonryItem (item) {
@@ -124,15 +163,6 @@ export default {
       let grid = document.getElementsByClassName('masonry')[0],
         rowGap = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-row-gap')),
         rowHeight = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-auto-rows'));
-                /*
-                 * Spanning for any brick = S
-                 * Grid's row-gap = G
-                 * Size of grid's implicitly create row-track = R
-                 * Height of item content = H
-                 * Net height of the item = H1 = H + G
-                 * Net height of the implicit row-track = T = G + R
-                 * S = H1 / T
-                 */
       let rowSpan = Math.ceil((item.querySelector('.card-content').getBoundingClientRect().height + rowGap) / (rowHeight + rowGap));
                 /* Set the spanning as calculated above (S) */
       item.style.gridRowEnd = 'span ' + rowSpan;
@@ -140,15 +170,12 @@ export default {
     resizeAllMasonryItems () {
                 // Get all item class objects in one list
       let allItems = document.getElementsByClassName('card');
-                /*
-                 * Loop through the above list and execute the spanning function to
-                 * each list-item (i.e. each masonry item)
-                 */
       for (let i = 0; i < allItems.length; i++) {
         this.resizeMasonryItem(allItems[i]);
       }
     },
-    toggleDrawer(){
+    setDrawerWidth(){
+      //this.editorState = ! this.editorState
       if(this.editorState){
         switch (this.$vuetify.breakpoint.name) {
           case 'xs': this.drawerWidth= '0%';
@@ -162,6 +189,9 @@ export default {
       else{
         this.drawerWidth = '100%'
       }
+    },
+    toggleDrawer(){
+      this.drawer = !this.drawer
     }
   },
   computed: {
