@@ -21,7 +21,18 @@
           </v-list>
         </v-menu>
       </v-card-title>
-        <v-card-text v-html="note.content"></v-card-text>
+        <v-textarea 
+          class="custom"
+          v-model="note.content"
+          auto-grow 
+          rows="1"
+          hide-details
+          dense
+          readonly 
+          color="accent"
+          flat
+          solo> 
+        </v-textarea>
     </div>
   </v-card>
 </template>
@@ -55,5 +66,8 @@ export default {
 </script>
 
 <style>
-
+.v-text-field__slot textarea{
+  line-height: 0.9;
+  font-size: 0.8rem;
+}
 </style>

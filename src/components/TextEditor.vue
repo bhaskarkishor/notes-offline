@@ -1,12 +1,14 @@
 <template>
   <v-container fluid>
       <v-textarea 
+      dense
        placeholder="Enter text here"
        v-model="content"
        auto-grow 
        auto-focus 
-       color="accent">
-      
+       background-color="accent"
+       solo
+       flat>
       </v-textarea>
       
   </v-container>
@@ -19,7 +21,7 @@
 export default {
   data(){
     return {
-      content:'',
+      content:null,
       note_id:null
     }
   },
@@ -28,7 +30,10 @@ export default {
     newNote(){
       console.log("event captured, newNote");
       this.content = null;
-      this.note_id = null;
+      if(this.note_id!=0){
+        this.note_id = null;
+      }
+      
     },
     getNote(id){
       this.note_id = id;
@@ -39,6 +44,7 @@ export default {
   watch:{
     content(){
       console.info(this.note_id,'Changes detected');
+      this.$emit('contentChanged');
       this.$store.dispatch('addNote',{
         id: this.note_id,
         content: this.content

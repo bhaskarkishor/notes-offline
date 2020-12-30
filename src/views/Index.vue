@@ -16,6 +16,7 @@
       class="accent"
       mobile-breakpoint="0"
     >
+      <v-container fluid ml-0 pl-0>
       <v-btn 
         text
         fab
@@ -23,13 +24,10 @@
         @click="toggleDrawer">
         <v-icon>{{toggleDrawerIcon.icon}}</v-icon>
       </v-btn>
+      </v-container>
       <v-container>
         <div class="masonry">
-
-          <div v-for="(note,key) in notes" :key="key">
-            <NotePreview @getNote="selectNote" :note="note" />
-          </div>
-
+          <NotePreview v-for="(note,key) in notes" :key="key" @getNote="selectNote" :note="note" />
         </div>
       </v-container>
     </v-navigation-drawer>
@@ -43,12 +41,12 @@
         @click="newNote"
         class="new--btn"
       >
-        <v-icon>mdi-plus</v-icon>
+        <v-icon x-large>mdi-plus</v-icon>
       </v-btn>
     </v-fab-transition>
 
     <v-main class="accent">
-      <TextEditor ref="textEditor" />
+      <TextEditor ref="textEditor" @contentChanged="resizeAllMasonryItems" />
     </v-main>
 
   </v-app>
@@ -70,13 +68,13 @@ export default {
       clipped: true,
       fixed: false,
       drawer: true,
-      editorState:false,
+      editor_state:false,
       drawer_width:'0%',
     }
   },
   mounted(){
     this.resizeAllMasonryItems()
-    setTimeout(() => {  console.info("Animation timeout");this.changeDrawerWidth(); }, 500);
+    setTimeout(() => {  console.info("Animation timeout");this.drawer_width='100%'; }, 500);
     //
   },
 
@@ -112,8 +110,8 @@ export default {
 
     newNote(){
       console.info('Creating new note');
-      if(!this.editorState){
-        this.editorState = !this.editorState;
+      if(!this.editor_state){
+        this.editor_state = !this.editor_state;
         //this.changeDrawerWidth();
       }
       this.$refs.textEditor.newNote();
@@ -121,36 +119,18 @@ export default {
 
     selectNote(id){
       console.log('note selected event');
-      this.editorState = true;
+      this.editor_state = true;
       this.$refs.textEditor.getNote(id)
     },
-    changeDrawerWidth(){
-      if(this.editorState){
-        // create animation using default behaviour
-        this.drawer = !this.drawer
-        switch (this.$vuetify.breakpoint.name) {
-          case 'xs': 
-          case 'sm':
-          case 'md': this.drawer_width=40;
-          break;
-          case 'lg': 
-          case 'xl': this.drawer_width='30%'
-        }
-        setTimeout(() => {  this.drawer = !this.drawer }, 300);
-      }
-      else{
-        this.drawer_width = '100%';
-      }
-    },
     toggleDrawer(){
-      this.editorState = ! this.editorState
+      this.editor_state = ! this.editor_state
       //this.changeDrawerWidth()
     }
   },
 
   watch:{
-    editorState(){
-      if(this.editorState){
+    editor_state(){
+      if(this.editor_state){
         // create animation using default behaviour
         this.drawer = !this.drawer
         switch (this.$vuetify.breakpoint.name) {
@@ -173,7 +153,7 @@ export default {
       return this.$store.state.notes
     },
     toggleDrawerIcon(){
-      if (!this.editorState) {
+      if (!this.editor_state) {
         return {  icon: 'mdi-chevron-right' }
       }
       else{
